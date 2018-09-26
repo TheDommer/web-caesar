@@ -7,21 +7,21 @@ app.config['DEBUG'] = True
 
 @app.route("/")
 def index():
-    return form 
+    return form
 
 form="""
 <!DOCTYPE html>
 <html>
     <head>
         <style>
-            form {
+            form {{
                 background-color: #eee;
                 padding: 20px;
                 margin: 0 auto;
                 width: 540px;
                 font: 16px sans-serif;
                 border-radius: 10px;
-            }
+            }}
             textarea{{
                 margin: 10px 0;
                 width: 540px;
@@ -36,33 +36,29 @@ form="""
     <input name="rot" type="text" value="0">
     <br>
     <label>Text input</label>
-    <textarea type="text" name="text" {0}></textarea {0}>
+    <textarea name="text">{0}</textarea > 
     <input type="submit"/>
     </form>
     </body>
 </html>        
 """
+
+
 @app.route("/", methods=['POST'])
 def encrypt(): 
-    text = request.args.get('text')
-    #tried using text = request.form['text'] and got 'TypeError: string indices must be integers'
-    for char in text: #getting 'TypeError: 'NoneType' object is not iterable' traced to this line 
-        if not char[text].isalpha(): 
-            text_error = "Please enter sentance"
-            return ("/?error=" + text_error)
-    else:
-        text=str(text)
+    text = request.form['text'] #need to use grab methods for 'post' 
+    #print(text)
+    #tried using  and got 'TypeError: string indices must be integers'
+    text=str(text)
         
-    rot = request.args.get("rot") #validate this for integer 
-    if not is_integer(rot):
-        rot_error = "Please enter number"
-        return ("/?error=" + rot_error)
-    else:
-        rot=int(rot)
+    rot = request.form['rot'] #validate this for integer 
+    rot=int(rot)
     ###need to add form.format stuff   
 
-    final_string = rotate_string(text, rot)
-    return "<h1>final_string</h1>"
+    coded_string = rotate_string(text, rot)
+    final_string= coded_string.format('text')
+    #print (final_string)
+    return form.format(final_string)
     #store values of request parameters store
     #convert data type if needed 
     #encrypt value of text using 'rotate_string'
